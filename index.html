@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="asteroids.css" type="text/css" charset="utf-8">
+    <title>Asteroids</title>
+    <script src="inherits.js"></script>
+    <script src="movingObject.js"></script>
+    <script src="movingObject2.js"></script>
+    <script src="game.js"></script>
+    <script src="asteroid.js"></script>
+    <script src="ship.js"></script>
+    <script src="bullet.js"></script>
+    <script src="keymaster.js"></script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>  
+    <script>
+        var canvas = document.getElementById("canvas");
+        canvas.height = window.innerHeight-20;
+        canvas.width = window.innerWidth-20;
+        var ctx = canvas.getContext("2d");
+        ctx.font = "40px sans-serif";
+        var welcomeText = "Welcome to Asteroids. Press [enter] to begin.";
+        var dirText = "[up] [down] [left] [right] to move | [space] to fire";
+        ctx.textAlign = 'center';
+        ctx.fillText(welcomeText, canvas.width/2, canvas.height/2);
+        ctx.font = "20px sans-serif";
+        ctx.fillText(dirText, canvas.width/2, canvas.height/2+50);
+        var game = new Asteroids.Game(canvas.height, canvas.width, ctx);    
+        game.bindKeyHandlers();
+    </script>
+</body>
+</html>
