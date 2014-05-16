@@ -22,9 +22,15 @@
         }
         game.removeAsteroid(asteroid);
         game.removeBullet(bullet);
-        
+        bullet.explode();
       }
     });
+  };
+  
+  Bullet.prototype.explode = function() {
+    audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', 'blop.mp3');
+    audioElement.play();
   };
   
 })(this);

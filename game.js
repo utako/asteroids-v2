@@ -9,6 +9,8 @@
     this.asteroids = [];
     this.bullets = [];
     this.show;
+    
+
   };
   
 
@@ -61,22 +63,22 @@
     var game = this
     this.asteroids.forEach(function(asteroid){
       asteroid.move();
-      if (asteroid.pos[0] > window.innerWidth){
+      if (asteroid.pos[0] >= window.innerWidth){
         var newVel = [-asteroid.vel[0], asteroid.vel[1]];
         game.asteroids.push(new Asteroids.Asteroid(asteroid.pos, newVel, asteroid.radius, asteroid.color));
         delete asteroids[asteroids.indexOf(asteroid)];
       }
-      else if (asteroid.pos[1] > window.innerHeight ){
+      else if (asteroid.pos[1] >= window.innerHeight ){
         var newVel = [asteroid.vel[0], -asteroid.vel[1]];
         game.asteroids.push(new Asteroids.Asteroid(asteroid.pos, newVel, asteroid.radius, asteroid.color));
         delete asteroids[asteroids.indexOf(asteroid)];
       }
-      else if (asteroid.pos[0] < 0) {
+      else if (asteroid.pos[0] <= 0) {
         var newVel = [-asteroid.vel[0], asteroid.vel[1]];
         game.asteroids.push(new Asteroids.Asteroid(asteroid.pos, newVel, asteroid.radius, asteroid.color));
         delete asteroids[asteroids.indexOf(asteroid)];
       }
-      else if (asteroid.pos[1] < 0){
+      else if (asteroid.pos[1] <= 0){
         var newVel = [asteroid.vel[0], -asteroid.vel[1]];
         game.asteroids.push(new Asteroids.Asteroid(asteroid.pos, newVel, asteroid.radius, asteroid.color));
         delete asteroids[asteroids.indexOf(asteroid)];
@@ -84,6 +86,23 @@
 
     });
     this.ship.move();
+    if (this.ship.pos[0] <= 0 || this.ship.pos[0] >= window.innerWidth || this.ship.pos[1] <= 0 || this.ship.pos[1] >= window.innerHeight) {
+    var pos;
+      if (this.ship.pos[0] <= 0) {
+        pos = [window.innerWidth, window.innerHeight-this.ship.pos[1]];      
+      } else if (this.ship.pos[0] >= window.innerWidth) {
+        pos = [0, window.innerHeight - this.ship.pos[1]];
+      } else if (this.ship.pos[1] <= 0) {
+        pos = [window.innerWidth - this.ship.pos[0], window.innerHeight];
+      } else if (this.ship.pos[1] >= window.innerHeight) {
+        pos = [window.innerWidth - this.ship.pos[0], 0];
+      }
+      var radius = this.ship.radius;
+      var color = this.ship.color;
+      var theta = this.ship.theta;
+      var mag = this.ship.mag;
+      this.ship = new Asteroids.Ship(pos, radius, color, theta, mag);
+    }
     this.bullets.forEach (function(bullet) {
       bullet.move();
     });
@@ -94,10 +113,17 @@
     var game = this;
     this.asteroids.forEach(function(asteroid) {
       if (ship.isCollidedWith.bind(ship, asteroid)()) {
-        alert("GAME OVER");
+        // game.explodeShip();
+       alert("GAME OVER");
         game.stop();
       }
     });
+  };
+  
+  Game.prototype.explodeShip = function() {
+    audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', 'sadtrombone.mp3');
+    audioElement.play();
   };
 
   Game.prototype.step = function(){
@@ -112,7 +138,7 @@
 
   Game.prototype.start = function(){
     var game = this;
-    this.addAsteroids(10);
+    this.addAsteroids(20);
     this.show = setInterval(game.step.bind(game), Game.FPS);
   };
 
@@ -128,6 +154,9 @@
     key('down', function() {game.ship.power(.25)});
     key('right', function() {game.ship.rotate(8)});
     key('space', function() {game.fireBullet()});
+    // this.audioElement.addEventListener("load", function() {
+    //   this.audioElement.play();
+    // }, false)
   };
 
 

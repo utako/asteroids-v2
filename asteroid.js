@@ -11,19 +11,24 @@
   Asteroid.inherits(Asteroids.MovingObject2);
 
   Asteroid.COLORS = ["#A5C7C1", "#D1E0DE", "#8CA39F", "#C8E0E3", "#ACC2B1", "#D3E0BF"];
-  //  Asteroid.RADIUS = 50;
-  Asteroid.POSITIONS = [[screen.width, screen.height], [0, 0], [0, screen.height], [screen.width, 0]];
-
+  
   Asteroid.randomAsteroid = function () {
-    var dimX = Math.floor(screen.width * Math.random());
-    var dimY = Math.floor(screen.height * Math.random());
-    var pos = [dimX, dimY];
+    var dimX1 = getRandom(0, window.innerWidth/2 - 20);
+    var dimY1 = getRandom(0, window.innerHeight/2 - 20);
+    var dimX2 = getRandom(window.innerWidth/2 + 20, window.innerWidth);
+    var dimY2 = getRandom(window.innerHeight/2 + 20, window.innerHeight);
+    var positions = [[dimX1, dimY1], [dimX2, dimY2], [dimX1, dimY2], [dimX2, dimY1]];
     // var pos = Asteroid.POSITIONS[Math.floor(Asteroid.POSITIONS.length*Math.random())];
+    var pos = positions[Math.floor(Math.random()*4)];
     var vel = Asteroid._randomVec();
     var radius = Math.random() * 100 + 10;
     var color = Asteroid.COLORS[Math.floor(Asteroid.COLORS.length * Math.random())];
     return new Asteroid(pos, vel, radius, color);
   };
+  
+  var getRandom = function (min, max) {
+    return Math.random() * (max - min) + min;
+  }
   
   Asteroid.subAsteroid = function(asteroid, bullet) {
     var pos = asteroid.pos;
@@ -35,28 +40,11 @@
   
   Asteroid._computeSubAsteroidVel = function(asteroid, bullet) {
     var orig_vel = asteroid.vel;
-    var new_mag = -Math.sqrt(Math.pow(asteroid.vel[0], 2) + Math.pow(asteroid.vel[1], 2));
+    var new_mag = (bullet.mag + Math.sqrt(Math.pow(asteroid.vel[0], 2) + Math.pow(asteroid.vel[1], 2)));
     var new_vels = [];
     new_vels.push([new_mag*cos(bullet.theta-45), new_mag*sin(bullet.theta-45)]);
     new_vels.push([new_mag*cos(bullet.theta+45), new_mag*sin(bullet.theta+45)]);
-    
-    // if ((asteroid.vel[0] <=  1 && asteroid.vel[0] >  0) && (asteroid.vel[1] === 0)) {
-//         new_vels = [[1, Math.cos(Math.PI/4)], [1, -Math.cos(Math.PI/4)]];
-//     } else if (asteroid.vel[0] ===  0 && asteroid.vel[1] === -1) {
-//         new_vels = [[Math.cos(Math.PI/4), 1], [-Math.cos(Math.PI/4), 1]];
-//     } else if (asteroid.vel[0] ===  -1 && asteroid.vel[1] === 0) {
-//         new_vels = [[-1, Math.cos(Math.PI/4)], [-1, -Math.cos(Math.PI/4)]];
-//     } else if (asteroid.vel[0] ===  0 && asteroid.vel[1] === 1) {
-//         new_vels = [[Math.cos(Math.PI/4), -1], [-Math.cos(Math.PI/4), -1]];
-//     } else if (asteroid.vel[0] ===  1 && asteroid.vel[1] === -1) {
-//         new_vels = [[Math.cos(Math.PI/8), Math.sin(Math.PI/8)], [Math.cos(3*Math.PI/8), Math.sin(3*Math.PI/8)]];
-//     } else if (asteroid.vel[0] ===  -1 && asteroid.vel[1] === 1) {
-//         new_vels = [[Math.cos(Math.PI + Math.PI/8), Math.sin(Math.PI + Math.PI/8)], [Math.cos(Math.PI + 3*Math.PI/8), Math.sin(Math.PI + 3*Math.PI/8)]];
-//     } else if (asteroid.vel[0] ===  1 && asteroid.vel[1] === 1) {
-//         new_vels = [[Math.cos(- Math.PI/8), Math.sin(-Math.PI/8)], [Math.cos(-3*Math.PI/8), Math.sin(-3*Math.PI/8)]];
-//     } else if (asteroid.vel[0] ===  -1 && asteroid.vel[1] === -1) {
-//         new_vels = [[Math.cos(5 * Math.PI/8), Math.sin(-5 * Math.PI/8)], [Math.cos(-15*Math.PI/8), Math.sin(15*Math.PI/8)]];
-//     }
+
     return [new_vels[0], new_vels[1]]
   };
 
