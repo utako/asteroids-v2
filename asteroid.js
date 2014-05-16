@@ -40,7 +40,7 @@
   
   Asteroid._computeSubAsteroidVel = function(asteroid, bullet) {
     var orig_vel = asteroid.vel;
-    var new_mag = (bullet.mag + Math.sqrt(Math.pow(asteroid.vel[0], 2) + Math.pow(asteroid.vel[1], 2)));
+    var new_mag = - Math.abs((bullet.mag * Math.sqrt(Math.pow(bullet.radius, 2)/Math.pow(asteroid.radius, 2)) - Math.sqrt(Math.pow(asteroid.vel[0], 2) + Math.pow(asteroid.vel[1], 2))));
     var new_vels = [];
     new_vels.push([new_mag*cos(bullet.theta-45), new_mag*sin(bullet.theta-45)]);
     new_vels.push([new_mag*cos(bullet.theta+45), new_mag*sin(bullet.theta+45)]);
