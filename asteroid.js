@@ -42,10 +42,17 @@
     var orig_vel = asteroid.vel;
     var new_mag = - Math.abs((bullet.mag * Math.sqrt(Math.pow(bullet.radius, 2)/Math.pow(asteroid.radius, 2)) - Math.sqrt(Math.pow(asteroid.vel[0], 2) + Math.pow(asteroid.vel[1], 2))));
     var new_vels = [];
-    new_vels.push([new_mag*cos(bullet.theta-45), new_mag*sin(bullet.theta-45)]);
-    new_vels.push([new_mag*cos(bullet.theta+45), new_mag*sin(bullet.theta+45)]);
+    var newTheta = Asteroid._computeNewTheta(asteroid, bullet);
+    new_vels.push([new_mag*cos(newTheta-45), new_mag*sin(newTheta-45)]);
+    new_vels.push([new_mag*cos(newTheta+45), new_mag*sin(newTheta+45)]);
 
     return [new_vels[0], new_vels[1]]
+  };
+  
+  Asteroid._computeNewTheta = function(asteroid, bullet) {
+    var asteroidTheta = Math.atan(-asteroid.pos[1]/asteroid.pos[0]);
+    var midTheta = bullet.theta + (bullet.theta - asteroidTheta)/2;
+    return midTheta;
   };
 
   Asteroid._randomVec = function() {
